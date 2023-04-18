@@ -1,14 +1,37 @@
 <audio id="myAudio" src="https://raw.githubusercontent.com/Rxztent/Rxztent.github.io/main/yes.mp3"></audio>
 <div id="myDiv" style="display: none;">Hello, World!</div>
-
+<canvas id="myCanvas"></canvas>
 <script>
   const audio = document.getElementById("myAudio");
   const div = document.getElementById("myDiv");
   const duration = 15000; // 15 seconds
   
-  audio.addEventListener("play", () => {
+  document.addEventListener('click', () => {
+    audio.play();
     setTimeout(() => {
       div.style.display = "block";
     }, duration);
   });
+  
+</script>
+<script>
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+
+
+const audioCtx = new AudioContext();
+const source = audioCtx.createMediaElementSource(audio);
+const analyser = audioCtx.createAnalyser();
+source.connect(analyser);
+analyser.connect(audioCtx.destination);
+
+setInterval(() => {
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(dataArray);
+
+  // Use the data from the audio waveform to change the color of the canvas
+  ctx.fillStyle = `rgb(${dataArray[0]}, ${dataArray[1]}, ${dataArray[2]})`;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}, 30);
+
 </script>
