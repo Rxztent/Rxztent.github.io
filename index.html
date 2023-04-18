@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>rxztent</title>
+	<title>My Webpage</title>
 	<style>
 		body {
-			background-color: black;
-			background-image: url('https://doc-10-9c-docs.googleusercontent.com/docs/securesc/2ppjdmsoomjj3vvm9rri743c1vr58m58/1rnbi4fkcrgf69vl2j6425bi5o3c37mr/1681802550000/03603128734629415126/03603128734629415126/1Lai9yQMpAZx3JkZSa6TA4cDMfgOsarR7?e=download&ax=ALy03A4peWseXmEM-cZD3nguwHFetonY48PfRktw0Gc6gGYujVzaGWqK98VbohK3eQhX9PcTkZAwZ8S1eEdmbFagy4XX3CSxtM9sxiQPR0A_Rrybnxc8Ne-CYZ4_QnczJGpnpTueqiXgnc1jagWBJxRDV55IF0yCzFOibWRrO7PJVAnO5338cVazxrUFxFzKOgZGeh9OaGFX7aqFTsj_1ZPKe_F8NSJGEr5s6gwyqjtZCdN_278XN6wR2YXuMNQiLb9siZww6hUzNGiN1kFi3tvb_Fj2bwh6fQ1sE1EiI9mKZh62ZOqWbA6AosP-wRRHRPIXg9C9g8nTZ_ITlEh5_iLZSXELFZo4yHuQaprAdgP9U99Zt6CHRTswJtbc8qBXOsEC5miIT9m5axciPhEPyGK29sabHtaXPlGuaRKlzhqZZMCNb_bj_vQd8M61LbWTa9DxuS-BSnpfxzYkUA2bP9zmBDUQ3VvZ55oIORmdo9QPZhUFFbZUj4afDnyvwPdvbuVEHgZ6Lf9QkyU6wz62GS4EMSlXqdpaDrKDOiQvPX15bmzjlt1Ok-r5FUvYGU7NQzmkU-ZzxxIme36fp7CZTV2956ATkNn6wYsmXI13y24p_eWStAkRWEQXtIxADrCMHvDLPWE1bTY8uMl0tEzKQg4hv8mqZ24jZapNMe1mshKz2_0ydeY_TSvfBSOKoMpnJYsgPVkLBHeh__MQl06qb4iyUq4SPoRGDkDGitlGVQk9AhSNP4nv-g2stP_Tle2k0sdmUTcvVyqYXzL2V9noTqfclPJ0eHJSem4Qm8YslGKUj42cROCJWnOD_JmLa8ATLcLNK4Fv_Jvlyi6pcbalA03koX0N9q3N7iPCD72zwZ1YAKXm6BfO9Ys6Vn2Zch8qKQ4o-Ea4o-byhybr816lqIu1tLjSUMTdrbOL02DHSAoheb0q4QOdhBopZt9FyDPvk7bZD7zK9nG6Hg&uuid=d86d198c-8eb4-47af-a5cc-8e92a6018710&authuser=1&nonce=j5bhuv8fu8q8q&user=03603128734629415126&hash=9vjijl73ssibpvc5li4pgltsoecu54hk');
-			background-size: cover;
-			background-position: center;
-			background-attachment: fixed;
-			background-blur: 10px;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+
+		video {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			object-fit: cover;
+			z-index: -1;
 		}
 
 		button {
@@ -87,7 +94,8 @@
 	</script>
 </head>
 <body>
-	<audio id="audio" src="yes.mp3" autoplay loop></audio>
+	<video src="background.mp4" autoplay loop muted></video>
+	<audio id="audio" src="yes.mp3" autoplay></audio>
 	<button id="button1" onclick="location.href='https://www.google.com/'">Google</button>
 	<button id="button2" onclick="location.href='https://www.youtube.com/'">YouTube</button>
 	<canvas id="visualizer"></canvas>
