@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>My Webpage</title>
+	<title>rxztent</title>
 	<style>
 		body {
 			margin: 0;
@@ -90,12 +90,16 @@
 			}
 
 			draw();
+
+            // Autoplay the audio
+            audioElement.autoplay = true;
+            audioElement.load();
 		});
 	</script>
 </head>
 <body>
 	<video src="background.mp4" autoplay loop muted></video>
-	<audio id="audio" src="yes.mp3" autoplay></audio>
+	<audio id="audio" src="yes.mp3"></audio>
 	<button id="button1" onclick="location.href='https://www.google.com/'">Google</button>
 	<button id="button2" onclick="location.href='https://www.youtube.com/'">YouTube</button>
 	<canvas id="visualizer"></canvas>
