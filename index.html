@@ -88,6 +88,7 @@
 <script>
 let audioContext;
 let audioStarted = false;
+let rxztentText;
 
 document.addEventListener('click', () => {
   if (!audioStarted) {
@@ -111,7 +112,7 @@ document.addEventListener('click', () => {
   }
 
   setTimeout(() => {
-    const rxztentText = document.querySelector('.rxztent');
+    rxztentText = document.querySelector('.rxztent');
     if (rxztentText) {
       rxztentText.style.display = 'block';
     }
@@ -126,18 +127,21 @@ document.addEventListener('click', () => {
 });
 
 function renderCanvas(analyser) {
-  const canvas = document.getElementById('myCanvas');
-  const ctx = canvas.getContext('2d');
-
   setInterval(() => {
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(dataArray);
 
-    // Flash between black and white with opacity
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const opacity = Math.random(); // Random opacity value between 0 and 1
-    ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Calculate the average frequency value
+    let sum = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+      sum += dataArray[i];
+    }
+    const average = sum / dataArray.length;
+
+    // Adjust the size of the text based on the average frequency value
+    if (rxztentText) {
+      rxztentText.style.fontSize = `${4 + average / 50}rem`;
+    }
   }, 30);
 }
 </script>
