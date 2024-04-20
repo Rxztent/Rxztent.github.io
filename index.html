@@ -21,6 +21,7 @@
     height: 100%;
   }
   .rxztent {
+    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -28,6 +29,15 @@
     color: white;
     font-family: 'Pacifico', cursive; /* Cool font */
     font-size: 4rem;
+    animation: flash 1s infinite alternate;
+  }
+  @keyframes flash {
+    from {
+      font-size: 4rem;
+    }
+    to {
+      font-size: 6rem;
+    }
   }
   .click-me {
     position: absolute;
@@ -99,6 +109,13 @@ document.addEventListener('click', () => {
       console.error('Failed to play audio:', error);
     });
   }
+
+  setTimeout(() => {
+    const rxztentText = document.querySelector('.rxztent');
+    if (rxztentText) {
+      rxztentText.style.display = 'block';
+    }
+  }, 15000);
 
   setTimeout(() => {
     const clickMeText = document.querySelector('.click-me');
