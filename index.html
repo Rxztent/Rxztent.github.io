@@ -27,16 +27,30 @@
 <canvas id="myCanvas"></canvas>
 
 <script>
-const audio = document.getElementById("myAudio");
-const duration = 15000; // 15 seconds
-let audioPlayed = false;
+let audioContext;
+let audioStarted = false;
 
 document.addEventListener('click', () => {
-  if (!audioPlayed) {
-    audio.play();
-    audioPlayed = true;
+  if (!audioStarted) {
+    // Create the AudioContext only on user interaction
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioStarted = true;
+
+    const audio = document.getElementById("myAudio");
+    audio.play().then(() => {
+      // Create the analyser node
+      const source = audioContext.createMediaElementSource(audio);
+      const analyser = audioContext.createAnalyser();
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+
+      // Start rendering the canvas
+      renderCanvas(analyser);
+    }).catch((error) => {
+      console.error('Failed to play audio:', error);
+    });
   }
-  
+
   setTimeout(() => {
     const div = document.createElement('div');
     div.textContent = "@rxztent";
@@ -48,27 +62,22 @@ document.addEventListener('click', () => {
     div.style.fontFamily = "Arial, sans-serif";
     div.style.fontSize = "4rem";
     document.body.appendChild(div);
-  }, duration);
+  }, 15000);
 });
 
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
+function renderCanvas(analyser) {
+  const canvas = document.getElementById('myCanvas');
+  const ctx = canvas.getContext('2d');
 
-const audioCtx = new AudioContext();
-const source = audioCtx.createMediaElementSource(audio);
-const analyser = audioCtx.createAnalyser();
-source.connect(analyser);
-analyser.connect(audioCtx.destination);
+  setInterval(() => {
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(dataArray);
 
-setInterval(() => {
-  const dataArray = new Uint8Array(analyser.frequencyBinCount);
-  analyser.getByteFrequencyData(dataArray);
-
-  // Use the data from the audio waveform to change the color of the canvas
-  ctx.fillStyle = `rgb(${dataArray[0]}, ${dataArray[1]}, ${dataArray[2]})`;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}, 30);
-
+    // Use the data from the audio waveform to change the color of the canvas
+    ctx.fillStyle = `rgb(${dataArray[0]}, ${dataArray[1]}, ${dataArray[2]})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }, 30);
+}
 </script>
 
 </body>
