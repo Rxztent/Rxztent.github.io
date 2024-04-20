@@ -29,15 +29,6 @@
     color: white;
     font-family: 'Pacifico', cursive; /* Cool font */
     font-size: 4rem;
-    animation: flash 1s infinite alternate;
-  }
-  @keyframes flash {
-    from {
-      font-size: 4rem;
-    }
-    to {
-      font-size: 6rem;
-    }
   }
   .click-me {
     position: absolute;
@@ -85,10 +76,12 @@
   </a>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/beat-detector@1.0.0/dist/beat-detector.min.js"></script>
 <script>
 let audioContext;
 let audioStarted = false;
 let rxztentText;
+let beatDetector;
 
 document.addEventListener('click', () => {
   if (!audioStarted) {
@@ -104,8 +97,11 @@ document.addEventListener('click', () => {
       source.connect(analyser);
       analyser.connect(audioContext.destination);
 
+      // Initialize beat detector
+      beatDetector = new BeatDetector(audioContext, analyser);
+
       // Start rendering the canvas
-      renderCanvas(analyser);
+      renderCanvas();
     }).catch((error) => {
       console.error('Failed to play audio:', error);
     });
@@ -126,31 +122,13 @@ document.addEventListener('click', () => {
   }, 1000);
 });
 
-function renderCanvas(analyser) {
-  const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
-
+function renderCanvas() {
   setInterval(() => {
-    analyser.getByteFrequencyData(dataArray);
-
-    // Calculate the average intensity of the waveform
-    let sum = 0;
-    for (let i = 0; i < bufferLength; i++) {
-      sum += dataArray[i];
-    }
-    const average = sum / bufferLength;
-
-    // Adjust the size of the text based on the intensity
-    if (rxztentText) {
-      const size = mapRange(average, 0, 255, 4, 6); // Map intensity to font size range
-      rxztentText.style.fontSize = `${size}rem`;
+    if (beatDetector && rxztentText) {
+      const isBeat = beatDetector.isBeat();
+      rxztentText.style.fontSize = isBeat ? '6rem' : '4rem';
     }
   }, 30);
-}
-
-// Function to map a value from one range to another
-function mapRange(value, fromLow, fromHigh, toLow, toHigh) {
-  return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
 }
 </script>
 
