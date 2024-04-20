@@ -127,22 +127,30 @@ document.addEventListener('click', () => {
 });
 
 function renderCanvas(analyser) {
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
   setInterval(() => {
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(dataArray);
 
-    // Calculate the average frequency value
+    // Calculate the average intensity of the waveform
     let sum = 0;
-    for (let i = 0; i < dataArray.length; i++) {
+    for (let i = 0; i < bufferLength; i++) {
       sum += dataArray[i];
     }
-    const average = sum / dataArray.length;
+    const average = sum / bufferLength;
 
-    // Adjust the size of the text based on the average frequency value
+    // Adjust the size of the text based on the intensity
     if (rxztentText) {
-      rxztentText.style.fontSize = `${4 + average / 50}rem`;
+      const size = mapRange(average, 0, 255, 4, 6); // Map intensity to font size range
+      rxztentText.style.fontSize = `${size}rem`;
     }
   }, 30);
+}
+
+// Function to map a value from one range to another
+function mapRange(value, fromLow, fromHigh, toLow, toHigh) {
+  return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
 }
 </script>
 
