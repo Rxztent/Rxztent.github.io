@@ -29,6 +29,7 @@
     color: white;
     font-family: 'Pacifico', cursive; /* Cool font */
     font-size: 4rem;
+    transition: font-size 0.3s ease;
   }
   .click-me {
     position: absolute;
@@ -76,12 +77,10 @@
   </a>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/beat-detector@1.0.0/dist/beat-detector.min.js"></script>
 <script>
 let audioContext;
 let audioStarted = false;
 let rxztentText;
-let beatDetector;
 
 document.addEventListener('click', () => {
   if (!audioStarted) {
@@ -97,11 +96,8 @@ document.addEventListener('click', () => {
       source.connect(analyser);
       analyser.connect(audioContext.destination);
 
-      // Initialize beat detector
-      beatDetector = new BeatDetector(audioContext, analyser);
-
       // Start rendering the canvas
-      renderCanvas();
+      renderCanvas(analyser);
     }).catch((error) => {
       console.error('Failed to play audio:', error);
     });
@@ -122,11 +118,23 @@ document.addEventListener('click', () => {
   }, 1000);
 });
 
-function renderCanvas() {
+function renderCanvas(analyser) {
   setInterval(() => {
-    if (beatDetector && rxztentText) {
-      const isBeat = beatDetector.isBeat();
-      rxztentText.style.fontSize = isBeat ? '6rem' : '4rem';
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    analyser.getByteFrequencyData(dataArray);
+
+    // Calculate the average intensity of the waveform
+    let sum = 0;
+    for (let i = 0; i < bufferLength; i++) {
+      sum += dataArray[i];
+    }
+    const average = sum / bufferLength;
+
+    // Adjust the size of the text based on the intensity
+    if (rxztentText) {
+      const size = Math.min(Math.max(4 + average / 50, 4), 6); // Limit font size between 4 and 6
+      rxztentText.style.fontSize = `${size}rem`;
     }
   }, 30);
 }
