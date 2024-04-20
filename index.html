@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive Audio</title>
+<title>Interactive Audio Canvas</title>
 <style>
   body, html {
     margin: 0;
@@ -29,8 +29,14 @@
 <script>
 const audio = document.getElementById("myAudio");
 const duration = 15000; // 15 seconds
+let audioPlayed = false;
 
 document.addEventListener('click', () => {
+  if (!audioPlayed) {
+    audio.play();
+    audioPlayed = true;
+  }
+  
   setTimeout(() => {
     const div = document.createElement('div');
     div.textContent = "@rxztent";
