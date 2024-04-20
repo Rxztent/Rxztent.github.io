@@ -136,7 +136,7 @@ function renderCanvas(analyser) {
 
     // Adjust the size of the text based on the intensity
     if (rxztentText) {
-      const size = Math.min(Math.max(¨6 + average / 50, 7), 25); // Limit font size between 4 and 6
+      const size = Math.min(Math.max(6 + average / 50, 7), 25); // Limit font size between 4 and 6
       rxztentText.style.fontSize = `${size}rem`;
     }
   }, 30);
