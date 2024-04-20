@@ -10,6 +10,7 @@
     padding: 0;
     height: 100%;
     overflow: hidden;
+    background-color: black;
   }
   canvas {
     display: block;
@@ -19,12 +20,60 @@
     width: 100%;
     height: 100%;
   }
+  .rxztent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-family: 'Pacifico', cursive; /* Cool font */
+    font-size: 4rem;
+  }
+  .click-me {
+    position: absolute;
+    top: calc(50% + 70px);
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 1.5rem;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .socials {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+  }
+  .socials a {
+    margin-right: 20px;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .socials a:hover {
+    color: #55acee; /* Twitter blue */
+  }
 </style>
 </head>
 <body>
 
 <audio id="myAudio" src="Audio/Background.wav"></audio>
 <canvas id="myCanvas"></canvas>
+
+<div class="rxztent">@rxztent</div>
+<div class="click-me">Click Me</div>
+<div class="socials">
+  <a href="https://discord.com/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.icons8.com/color/48/000000/discord-logo.png" alt="Discord">
+  </a>
+  <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.icons8.com/color/48/000000/youtube-play.png" alt="YouTube">
+  </a>
+</div>
 
 <script>
 let audioContext;
@@ -52,17 +101,11 @@ document.addEventListener('click', () => {
   }
 
   setTimeout(() => {
-    const div = document.createElement('div');
-    div.textContent = "@rxztent";
-    div.style.position = "absolute";
-    div.style.top = "50%";
-    div.style.left = "50%";
-    div.style.transform = "translate(-50%, -50%)";
-    div.style.color = "white";
-    div.style.fontFamily = "Arial, sans-serif";
-    div.style.fontSize = "4rem";
-    document.body.appendChild(div);
-  }, 15000);
+    const clickMeText = document.querySelector('.click-me');
+    if (clickMeText) {
+      clickMeText.style.display = 'none';
+    }
+  }, 1000);
 });
 
 function renderCanvas(analyser) {
@@ -73,9 +116,14 @@ function renderCanvas(analyser) {
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(dataArray);
 
-    // Use the data from the audio waveform to change the color of the canvas
-    ctx.fillStyle = `rgb(${dataArray[0]}, ${dataArray[1]}, ${dataArray[2]})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Create a wave-like pattern using the frequency data
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < canvas.width; i += 5) {
+      const value = dataArray[Math.floor((i / canvas.width) * dataArray.length)];
+      const lineHeight = (value / 255) * canvas.height * 2;
+      ctx.fillStyle = (i % 10 === 0) ? 'white' : 'black'; // Flash between black and white
+      ctx.fillRect(i, canvas.height / 2 - lineHeight / 2, 5, lineHeight);
+    }
   }, 30);
 }
 </script>
